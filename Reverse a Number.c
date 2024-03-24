@@ -1,27 +1,69 @@
-#include <stdio.h>
 
-int reverseNumber(int num) {
-    int reversedNum = 0;
-    while (num != 0) {
-        reversedNum = reversedNum * 10 + num % 10; // Add the last digit to the reversed number
-        num /= 10; // Remove the last digit from the number
-    }
-    return reversedNum;
-}
+
+#include<stdio.h>
+
+// Function prototypes
+int reverse(int);
+void readfromfile(char*, int*);
+void writetofile(char*, int);
 
 int main() {
-    int number, reversedNumber;
+    int n;
 
-    // Input number from the user
-    printf("Enter a number: ");
-    scanf("%d", &number);
+    // Read an integer from file
+    readfromfile("input.txt", &n);
 
-    // Reverse the number
-    reversedNumber = reverseNumber(number);
+    // Calculate the reverse of the number
+    int reversed = reverse(n);
 
-    // Display the result
-    printf("Reversed number: %d\n", reversedNumber);
+    // Write the reversed number to the output file
+    writetofile("output.txt", reversed);
 
     return 0;
 }
+
+// Function to reverse a given number
+int reverse(int n) {
+    int ld, rev = 0;
+
+    // Loop to reverse the number
+    while(n != 0) {
+        ld = n % 10;    // Extract the last digit
+        rev = rev * 10 + ld;    // Append the digit to the reversed number
+        n = n / 10;    // Remove the last digit from the original number
+    }
+
+    // Return the reversed number
+    return rev;
+}
+
+// Function to read an integer from a file
+void readfromfile(char* filename, int *n) {
+    FILE *file = fopen(filename, "r");
+
+    // Check if the file opened successfully
+    if(file == NULL) {
+        printf("Error opening input file");
+        return;
+    }
+
+    // Read an integer from the file
+    fscanf(file, "%d", n);
+
+    // Close the input file
+    fclose(file);
+}
+
+// Function to write an integer to a file
+void writetofile(char* filename, int result) {
+    FILE *file = fopen(filename, "w");
+
+    // Check if the file opened successfully
+    if(file == NULL) {
+        printf("Error opening output file %s", filename);
+        return;
+    }
+
+    // Write the reversed number to the file
+    fprintf(file, "Reverse number = %d\n", result);
 
